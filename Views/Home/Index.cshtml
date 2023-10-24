@@ -1,8 +1,41 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<head>
+    <meta charset="utf-8" />
+    <script src="https://kit.fontawesome.com/9e7b1296a6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EWeather.styles.css" asp-append-version="true" />
+</head>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="stuff" style="text-align: center;">
+    <input type="text" list="cities" class="city-menu"/>
+        <datalist id="cities">
+            <option>Venlo</option>
+            <option>Arnhem</option>
+            <option>Berkhout</option>
+            <option>Utrecht</option>
+            <option>Den Helder</option>
+            <option>Weert</option>
+            <option>Gilze Rijen</option>
+            <option>Goes</option>
+            <option>Groningen</option>
+            <option>Zwolle</option>
+            <option>Hoek van Holland</option>
+            <option>Hoogeveen</option>
+            <option>Enkhuizen</option>
+            <option>Maastricht</option>
+        </datalist> 
+    <br />
+    <i class="fa-solid fa-temperature-half"></i> Current Temp <i class="fa-regular fa-sun"></i> Solar Power <br>
+    <i class="fa-solid fa-temperature-high"></i> Perceived Temp <i class="fa-solid fa-cloud-rain"></i> Rain last hour <br>
+    <i class="fa-solid fa-temperature-arrow-down"></i> Ground Temp <i class="fa-regular fa-compass"></i> Wind direction
 </div>
+
+
+<!-- 
+        <i class="fa-solid fa-temperature-half"></i> Current Temp <i class="fa-regular fa-sun"></i> Solar Power <br>
+        <i class="fa-solid fa-temperature-high"></i> Perceived Temp <i class="fa-solid fa-cloud-rain"></i> Rain last hour <br>
+        <i class="fa-solid fa-temperature-arrow-down"></i> Ground Temp <i class="fa-regular fa-compass"></i> Wind direction
+-->

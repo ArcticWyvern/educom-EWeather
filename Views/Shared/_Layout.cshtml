@@ -4,22 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EWeather</title>
+    <script src="https://kit.fontawesome.com/9e7b1296a6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EWeather.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"></nav>
+        <div class="colourbar"></div>
     </header>
     <div class="container">
+        <div class="logo">
+            <img src="eWeather.png" alt="eWeather Logo" width="400" height="170">
+        </div>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    
 
     <footer class="border-top footer text-muted">
         <div class="container">
+            <i class="fa-solid fa-temperature-half"></i>
             &copy; 2023 - EWeather - <a href="https://www.buienradar.nl">BuienRadar</a>
         </div>
     </footer>

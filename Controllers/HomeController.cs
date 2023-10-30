@@ -1,6 +1,7 @@
 ﻿using EWeather.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace EWeather.Controllers
 {
@@ -13,9 +14,24 @@ namespace EWeather.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            string apiResponse;
+            WeatherResponse? weatherResponse;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("https://data.buienradar.nl/2.0/feed/json"))
+                {
+                    apiResponse = await response.Content.ReadAsStringAsync();
+                    weatherResponse = JsonConvert.DeserializeObject<WeatherResponse>(apiResponse);
+                }
+            }
+
+            // Now you can access the weather data using weatherResponse.Actual.StationMeasurements
+            List<Weather> weatherList = weatherResponse?.Actual?.StationMeasurements ?? new List<Weather>();
+
+            // Pass the weatherList to the view
+            return View(weatherList);
         }
 
         public IActionResult Privacy()

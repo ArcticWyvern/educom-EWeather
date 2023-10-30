@@ -20,3 +20,43 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#cityInput {
+    width: 70%;
+    border-radius: 20px;
+    padding: 8px;
+    padding-left: 15px;
+    font-size: 16px;
+    font-family: Arial;
+    margin-bottom: 15px;
+    border: solid 1px grey;
+}
+.subtext {
+    color: black;
+    font-weight: bolder;
+    font-size: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+
+.icon {
+
+}
+
+.weathervalue-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.weathervalue {
+    color: #4ad6ed;
+    font-weight: bold;
+    font-size: 42px;
+    text-align: center;
+    display: inline-block;
+    width: 140px;
+ 
+}

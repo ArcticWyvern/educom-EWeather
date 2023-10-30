@@ -1,36 +1,97 @@
-﻿@{
+﻿@model List<Weather>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 <head>
     <meta charset="utf-8" />
     <script src="https://kit.fontawesome.com/9e7b1296a6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EWeather.styles.css" asp-append-version="true" />
 </head>
 
 <div class="stuff" style="text-align: center;">
-    <input type="text" list="cities" class="city-menu"/>
+    <input type="text" list="cities" class="city-menu" id="cityInput"/>
         <datalist id="cities">
-            <option>Venlo</option>
-            <option>Arnhem</option>
-            <option>Berkhout</option>
-            <option>Utrecht</option>
-            <option>Den Helder</option>
-            <option>Weert</option>
-            <option>Gilze Rijen</option>
-            <option>Goes</option>
-            <option>Groningen</option>
-            <option>Zwolle</option>
-            <option>Hoek van Holland</option>
-            <option>Hoogeveen</option>
-            <option>Enkhuizen</option>
-            <option>Maastricht</option>
+            @foreach (var weather in Model.OrderBy(w => w.Regio))
+            {
+                <option value="@weather.Regio"
+                        data-temperature="@weather.Temperature"
+                        data-ground-temperature="@weather.GroundTemperature"
+                        data-perceived-temperature="@weather.FeelTemperature"
+                        data-rainfall="@weather.RainFallLastHour"
+                        data-sunpower="@weather.Sunpower"
+                        data-winddirection="@weather.WindDirection">
+                </option>
+            }
         </datalist> 
-    <br />
-    <i class="fa-solid fa-temperature-half"></i> Current Temp <i class="fa-regular fa-sun"></i> Solar Power <br>
-    <i class="fa-solid fa-temperature-high"></i> Perceived Temp <i class="fa-solid fa-cloud-rain"></i> Rain last hour <br>
-    <i class="fa-solid fa-temperature-arrow-down"></i> Ground Temp <i class="fa-regular fa-compass"></i> Wind direction
+    <script>
+        // jQuery code to handle input/change event of the city input field
+        $(document).ready(function () {
+            $('#cityInput').on('input', function () {
+                var selectedCity = $('#cities option[value="' + $(this).val() + '"]');
+                if (selectedCity.length > 0) {
+                    var temperature = parseFloat(selectedCity.data('temperature'));
+                    var groundTemperature = parseFloat(selectedCity.data('ground-temperature'));
+                    var perceivedTemperature = parseFloat(selectedCity.data('perceived-temperature'));
+                    var rainfall = parseFloat(selectedCity.data('rainfall'));
+                    var sunpower = parseFloat(selectedCity.data('sunpower'));
+                    var windDirection = selectedCity.data('winddirection');
+
+                    var cityDetailsHtml = '<div class="row">' +
+                        '<div class="col text-center weathervalue-container">' +
+                        '<i class="fa-solid fa-temperature-half fa-3x"></i>' +
+                        '<span class="weathervalue">' + temperature + '&#8451;</span>' +
+                        '<div class="subtext">Actuele Temperatuur</div>' +
+                        '</div>' +
+                        '<div class="col text-center weathervalue-container">' +
+                        '<i class="fa-solid fa-temperature-arrow-down fa-3x"></i>' +
+                        '<span class="weathervalue">' + groundTemperature + '&#8451;</span>' +
+                        '<div class="subtext">Grond Temperatuur</div>' +
+                        '</div>' +
+                        '<div class="col text-center weathervalue-container">' +
+                        '<i class="fa-solid fa-temperature-high fa-3x"></i>' +
+                        '<span class="weathervalue">' + perceivedTemperature + '&#8451;</span>' +
+                        '<div class="subtext">Gevoelstemperatuur</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="row">' +
+                        '<div class="col text-center weathervalue-container">' +
+                        '<i class="fa-solid fa-cloud-rain fa-3x"></i>' +
+                        '<span class="weathervalue">' + rainfall + '</span>' +
+                        '<div class="subtext">Regen Laatste Uur</div>' +
+                        '</div>' +
+                        '<div class="col text-center weathervalue-container">' +
+                        '<i class="fa-regular fa-sun fa-3x"></i>' +
+                        '<span class="weathervalue">' + sunpower + '</span>' +
+                        '<div class="subtext">Zonnekracht</div>' +
+                        '</div>' +
+                        '<div class="col text-center weathervalue-container">' +
+                        '<i class="fa-regular fa-compass fa-3x"></i>' +
+                        '<span class="weathervalue">' + windDirection + '</span>' +
+                        '<div class="subtext">Windrichting</div>' +
+                        '</div>' +
+                        '</div>';
+
+
+                    // Update the city details div with the selected city's properties
+                    $('#cityDetails').html(cityDetailsHtml);
+                } else {
+                    // Clear the city details div if no city is selected
+                    $('#cityDetails').empty();
+                }
+            });
+        });
+    </script>
+
+    <div id="cityDetails">
+        <!-- citydetails will be displayed here -->
+    </div>
+    
+    
+   
 </div>
 
 

@@ -40,16 +40,15 @@ body {
 }
 
 
-.icon {
-
+.custom-col {
+    margin: 5px;
+    margin-right: 5px !important;
+    padding: 0;
 }
 
-.weathervalue-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.custom-col > .col {
+    padding: 0;
 }
-
 
 .weathervalue {
     color: #4ad6ed;

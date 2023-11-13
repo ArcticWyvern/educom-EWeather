@@ -6,7 +6,6 @@ namespace EWeatherAPI.Models
     public class StationMeasurement
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }   
         
         public string Regio { get; set; }
@@ -21,7 +20,7 @@ namespace EWeatherAPI.Models
 
         public decimal Sunpower { get; set; }
 
-        public string WindDirection { get; set; }
+        public string WindDirection { get; set; } = "ZW";
 
         public decimal Latitude { get; set; }
 

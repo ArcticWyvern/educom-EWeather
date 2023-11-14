@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using NuGet.Packaging.Signing;
 using System.Diagnostics;
+using System.Globalization;
 
 
 namespace EWeatherAPI.Models
@@ -31,6 +34,8 @@ namespace EWeatherAPI.Models
                     int start = line.IndexOf(':');
 
                     int interval = Convert.ToInt32(line.Substring(start + 1));
+
+                    if(interval >= 86400 ) interval = 86400; // 86400 seconds is 1 full day (feels pointless to have interval be more than that)
 
                     return TimeSpan.FromSeconds(interval);
                 }
@@ -68,6 +73,18 @@ namespace EWeatherAPI.Models
                     if (weatherResponse?.Actual?.StationMeasurements != null)
                     {
                         List<StationMeasurement> weatherList = weatherResponse.Actual.StationMeasurements;
+
+                        foreach (var measurement in weatherList)
+                        {
+                            if (measurement.Timestamp != null && measurement.Timestamp != "0.0")
+                            {
+                                measurement.Datestamp = DateTime.ParseExact(measurement.Timestamp, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+                            }
+                            else
+                            {
+                                measurement.Datestamp = DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+                            }            
+                        }
 
                         await sampleService.UpdateDatabaseAsync(weatherList);
                     }

@@ -115,6 +115,29 @@ namespace EWeatherAPI.Controllers
             return NoContent();
         }
 
+        
+        // GET:
+        [HttpGet("GetByRegionAndDate")]
+        public IActionResult GetByRegionAndDate(string region, DateTime startDate, DateTime? endDate = null)
+        {
+            try
+            {
+                endDate ??= startDate.AddDays(7);
+
+                var entries = _context.StationMeasurements
+                    .Where(entry => entry.Regio == region && entry.Datestamp >= startDate && entry.Datestamp <= endDate)
+                    .ToList();
+
+                return Ok(entries);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        } 
+
+
         private bool StationMeasurementExists(long id)
         {
             return (_context.StationMeasurements?.Any(e => e.Id == id)).GetValueOrDefault();

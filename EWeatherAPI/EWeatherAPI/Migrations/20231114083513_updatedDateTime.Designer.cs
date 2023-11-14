@@ -3,6 +3,7 @@ using System;
 using EWeatherAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EWeatherAPI.Migrations
 {
     [DbContext(typeof(StationMeasurementContext))]
-    partial class StationMeasurementContextModelSnapshot : ModelSnapshot
+    [Migration("20231114083513_updatedDateTime")]
+    partial class updatedDateTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -22,9 +25,6 @@ namespace EWeatherAPI.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Datestamp")
-                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("FeelTemperature")
                         .HasColumnType("TEXT");
@@ -45,8 +45,7 @@ namespace EWeatherAPI.Migrations
                     b.Property<decimal>("Temperature")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Timestamp")
-                        .IsRequired()
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WindDirection")

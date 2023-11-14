@@ -1,1 +1,1 @@
-﻿Frequency of updates in seconds: 5
+﻿Frequency of updates in seconds (max of 1 day): 600

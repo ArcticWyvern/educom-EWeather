@@ -115,8 +115,26 @@ namespace EWeatherAPI.Controllers
             return NoContent();
         }
 
-        
-        // GET:
+        // GET: api/StationMeasurements/Latest
+        [HttpGet("Latest")]
+        public async Task<ActionResult<List<StationMeasurement>>> GetLatest()
+        {
+            try
+            {
+                var latest = await _context.StationMeasurements
+                    .GroupBy(m => m.Regio)
+                    .Select(g => g.OrderByDescending(m => m.Datestamp).FirstOrDefault())
+                    .ToListAsync();
+
+                return Ok(latest);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // GET: api/StationMeasurements/GetByRegionAndDate
         [HttpGet("GetByRegionAndDate")]
         public IActionResult GetByRegionAndDate(string region, DateTime startDate, DateTime? endDate = null)
         {
@@ -132,7 +150,6 @@ namespace EWeatherAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex}");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         } 

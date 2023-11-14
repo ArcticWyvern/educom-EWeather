@@ -15,7 +15,8 @@
 <div style="text-align: center;">
     <input type="text" list="cities" class="city-menu" id="cityInput"/>
         <datalist id="cities">
-            @foreach (var weather in Model.OrderBy(w => w.Regio))
+            @foreach (var weather in Model
+            .OrderBy(measurements => measurements.Regio))
             {
                 <option value="@weather.Regio"
                         data-temperature="@weather.Temperature"
@@ -23,7 +24,9 @@
                         data-perceived-temperature="@weather.FeelTemperature"
                         data-rainfall="@weather.RainFallLastHour"
                         data-sunpower="@weather.Sunpower"
-                        data-winddirection="@weather.WindDirection">
+                        data-winddirection="@weather.WindDirection"
+                        data-timestamp="@weather.Timestamp"
+                        date-datestamp="@weather.Datestamp">
                 </option>
             }
         </datalist> 

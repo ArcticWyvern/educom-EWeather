@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 
+// deprecated
+
 namespace EWeather.Models
 {
     public class WeatherResponse

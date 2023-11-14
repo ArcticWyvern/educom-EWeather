@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EWeatherAPI\**" />
+    <Content Remove="EWeatherAPI\**" />
+    <EmbeddedResource Remove="EWeatherAPI\**" />
+    <None Remove="EWeatherAPI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\eWeather.png" />
   </ItemGroup>
 

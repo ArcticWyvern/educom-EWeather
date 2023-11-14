@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace EWeather.Controllers
 {
@@ -41,12 +42,6 @@ namespace EWeather.Controllers
                     }
                 }
             }
-
-            
-            
-            // Now you can access the weather data using weatherResponse.Actual.StationMeasurements
-            //List<Weather> weatherList = weatherResponse;
-
             // Pass the weatherList to the view
             return View(weatherList);
         }

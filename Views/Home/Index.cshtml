@@ -30,6 +30,8 @@
                 </option>
             }
         </datalist> 
+    <br>
+    
     <script>
         // jQuery code to handle input/change event of the city input field
         $(document).ready(function () {
@@ -83,13 +85,20 @@
                     $('#cityDetails').empty();
                 }
             });
+
+            $('#showGraphButton').on('click', function () {
+                var startDate = $('#startDateInput').val();
+                var endDate = $('#endDateInput').val();
+                var region = $()
+
+                // Redirect to the controller action with the specified date parameters
+                window.location.href = '/Weather/Graph?startDate=' + startDate + '&endDate=' + endDate;
+            });
         });
     </script>
 
     <div id="cityDetails">
         <!-- citydetails will be displayed here -->
     </div>
-    
-    
-   
+    <button id="showGraphButton">Show Graph</button>
 </div>

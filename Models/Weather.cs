@@ -18,9 +18,6 @@ namespace EWeather.Models
 
         public string WindDirection { get; set; }
 
-        public decimal Latitude { get; set; }
-
-        public decimal Longitude { get; set; }
         public string Timestamp { get; set; } = "2023-11-14T09:20:00";
 
         public DateTime Datestamp { get; set; }

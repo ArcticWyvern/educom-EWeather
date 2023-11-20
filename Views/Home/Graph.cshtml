@@ -1,0 +1,182 @@
+﻿@model List<Weather>
+
+@{
+    ViewData["Title"] = "Graph Page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Graph Page</title>
+    <script src="https://kit.fontawesome.com/9e7b1296a6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EWeather.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <canvas id="weatherChart"></canvas>
+
+
+    <br />
+    <div id="errorContainer"></div>
+    <button id="showGraphButton">Update Dates</button>
+    <button id="homeButton">Home</button>
+
+    <br />
+    <input type="date" id="startDateInput" name="date-start" />
+    <input type="date" id="endDateInput" name="date-end" />
+
+    <script>
+        var weatherData = @Html.Raw(Json.Serialize(Model));
+
+        // Sort weatherData based on timestamps
+        weatherData.sort(function (a, b) {
+            return new Date(a.timestamp) - new Date(b.timestamp);
+        });
+
+        var timestamps = weatherData.map(function (entry) {
+            return new Date(entry.timestamp);
+        });
+
+        var temperatureData = weatherData.map(function (entry) {
+            return entry.temperature;
+        });
+
+        var groundTemperatureData = weatherData.map(function (entry) {
+            return entry.groundTemperature;
+        });
+
+        var feelTemperatureData = weatherData.map(function (entry) {
+            return entry.feelTemperature;
+        });
+
+        var rainFallLastHourData = weatherData.map(function (entry) {
+            return entry.rainFallLastHour;
+        });
+
+        var sunpowerData = weatherData.map(function (entry) {
+            return entry.sunpower; 
+        });
+
+        var minTemp = Math.min(...temperatureData);
+        var maxTemp = Math.max(...temperatureData);
+
+        var scaledSunpowerData = sunpowerData.map(function (value) {
+            if (value <= 0) return 0; 
+            var result = (value - minTemp) / (maxTemp - minTemp);
+            return parseFloat(result.toFixed(1));
+        });
+
+        var ctx = document.getElementById('weatherChart').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timestamps.map(date => date.toLocaleString()), // Convert dates to strings
+                datasets: [
+                    {
+                        label: 'Temperature',
+                        data: temperatureData,
+                        borderColor: 'orange',
+                        borderWidth: 2,
+                        fill: false
+                    },
+                    {
+                        label: 'Ground Temperature',
+                        data: groundTemperatureData,
+                        borderColor: 'green',
+                        borderWidth: 2,
+                        fill: false
+                    },
+                    {
+                        label: 'Feel Temperature',
+                        data: feelTemperatureData,
+                        borderColor: 'purple',
+                        borderWidth: 2,
+                        fill: false
+                    },
+                    {
+                        label: 'Rainfall (past hour)',
+                        data: rainFallLastHourData,
+                        borderColor: 'steelblue',
+                        borderWidth: 2,
+                        fill: false
+                    },
+                    {
+                        label: 'Sunpower (relative to temperature)',
+                        data: scaledSunpowerData,
+                        borderColor: 'yellow',
+                        borderWidth: 2,
+                        fill: false
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            parser: 'date-fns',
+                            unit: 'day',
+                            tooltipFormat: 'yyyy-MM-dd',
+                            displayFormats: {
+                                day: 'yyyy-MM-dd'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Timestamps'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Values'
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#showGraphButton').on('click', function () {
+            var startDate = $('#startDateInput').val();
+            var endDate = $('#endDateInput').val();
+            var errorContainer = $('#errorContainer');
+
+            var weatherData = @Html.Raw(Json.Serialize(Model));
+
+            var temperatureData = weatherData.map(function (entry) {
+                return entry.regio;
+            });
+
+            
+            if (startDate) {
+                var cityName = temperatureData[0];
+
+                // Redirect to the controller action with the specified date parameters
+                window.location.href = '/Home/Graph?region=' + cityName + '&startDate=' + startDate + '&endDate=' + endDate;
+            } else {
+                displayError("No starting date selected", errorContainer);
+            }
+        });
+        function displayError(errorMessage, container) {
+            var errorDiv = $('<div>').text(errorMessage);
+
+            container.empty();
+            container.append(errorDiv);
+        }
+        $('#homeButton').on('click', function () {
+            window.location.href = '/Home';
+        });
+    </script>
+
+
+</body>
+</html>
+

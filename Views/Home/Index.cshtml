@@ -26,7 +26,8 @@
                         data-sunpower="@weather.Sunpower"
                         data-winddirection="@weather.WindDirection"
                         data-timestamp="@weather.Timestamp"
-                        date-datestamp="@weather.Datestamp">
+                        data-datestamp="@weather.Datestamp"
+                        data-cityname="@weather.Regio">
                 </option>
             }
         </datalist> 
@@ -35,8 +36,17 @@
     <script>
         // jQuery code to handle input/change event of the city input field
         $(document).ready(function () {
+            var selectedCity;
+            var fade = 600;
+
+            function fadeInCityDetails(cityDetailsHtml) {
+                $('#cityDetails').fadeOut(fade, function () {
+                    $(this).html(cityDetailsHtml).fadeIn(fade);
+                });
+            }
+            
             $('#cityInput').on('input', function () {
-                var selectedCity = $('#cities option[value="' + $(this).val() + '"]');
+                selectedCity = $('#cities option[value="' + $(this).val() + '"]');
                 if (selectedCity.length > 0) {
                     var temperature = parseFloat(selectedCity.data('temperature'));
                     var groundTemperature = parseFloat(selectedCity.data('ground-temperature'));
@@ -44,7 +54,7 @@
                     var rainfall = parseFloat(selectedCity.data('rainfall'));
                     var sunpower = parseFloat(selectedCity.data('sunpower'));
                     var windDirection = selectedCity.data('winddirection');
-
+                    
                     var cityDetailsHtml = '<div class="row">' +
                         '<div class="col text-center custom-col">' +
                         '<i class="fa-solid fa-temperature-half fa-3x"></i> ' +
@@ -76,29 +86,54 @@
                         '<div class="col text-center custom-col">' +
                         '<i class="fa-regular fa-compass fa-3x"></i> ' +
                         '<span class="weathervalue">' + windDirection + '</span><br/>' +
-                        '<span class="subtext">Windrichting</span>' +
+                        '<span class="subtext">Windrichting</span>' + 
                         '</div>' +
                         '</div>';
 
-                    $('#cityDetails').html(cityDetailsHtml);
+                    fadeInCityDetails(cityDetailsHtml);
                 } else {
-                    $('#cityDetails').empty();
+                    $('#cityDetails').fadeOut(fade, function () {
+                        $(this).empty();
+                    });
                 }
             });
 
             $('#showGraphButton').on('click', function () {
                 var startDate = $('#startDateInput').val();
                 var endDate = $('#endDateInput').val();
-                var region = $()
+                var errorContainer = $('#errorContainer');
+                
+                if (selectedCity && selectedCity.length > 0) {
+                    if (startDate) {
+                        var cityName = selectedCity.data('cityname');
 
-                // Redirect to the controller action with the specified date parameters
-                window.location.href = '/Weather/Graph?startDate=' + startDate + '&endDate=' + endDate;
+                        // Redirect to the controller action with the specified date parameters
+                        window.location.href = '/Home/Graph?region=' + cityName + '&startDate=' + startDate + '&endDate=' + endDate;
+                    } else {
+                        displayError("No starting date selected", errorContainer);
+                    }
+                    
+                } else  {
+                    displayError("No (valid) city selected", errorContainer);
+                }
             });
+            function displayError(errorMessage, container) {
+                var errorDiv = $('<div>').text(errorMessage);
+
+                container.empty();
+                container.append(errorDiv);
+            }
         });
     </script>
 
     <div id="cityDetails">
         <!-- citydetails will be displayed here -->
     </div>
+    <div id="errorContainer"></div>
     <button id="showGraphButton">Show Graph</button>
+    <br />
+    <input type="date" id="startDateInput" name="date-start" />
+    <input type="date" id="endDateInput" name="date-end" />
+
+    
 </div>
